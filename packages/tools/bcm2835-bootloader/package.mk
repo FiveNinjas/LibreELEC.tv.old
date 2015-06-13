@@ -33,7 +33,10 @@ PKG_IS_ADDON="no"
 PKG_AUTORECONF="no"
 
 make_target() {
-  : # nothing to make
+  if [ -f $PROJECT_DIR/$PROJECT/bootloader/dt-blob.dts ]; then
+    echo Compiling device tree blob
+    dtc -O dtb -o dt-blob.bin $PROJECT_DIR/$PROJECT/bootloader/dt-blob.dts
+  fi
 }
 
 makeinstall_target() {
@@ -42,6 +45,7 @@ makeinstall_target() {
     cp -PRv bootcode.bin $INSTALL/usr/share/bootloader
     cp -PRv fixup_x.dat $INSTALL/usr/share/bootloader/fixup.dat
     cp -PRv start_x.elf $INSTALL/usr/share/bootloader/start.elf
+    cp -PRv dt-blob.bin $INSTALL/usr/share/bootloader/dt-blob.bin
 
     cp -PRv $PKG_DIR/scripts/update.sh $INSTALL/usr/share/bootloader
     cp -PRv $PKG_DIR/files/3rdparty/bootloader/config.txt $INSTALL/usr/share/bootloader
