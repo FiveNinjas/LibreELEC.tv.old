@@ -64,6 +64,7 @@ fi
   cat /mnt/licenses.txt >> $MOUNTPOINT/config.txt
   sed -i $MOUNTPOINT/config.txt -e s/MPEG2_LICENSE/decode_MPG2/
   sed -i $MOUNTPOINT/config.txt -e s/VC1_LICENSE/decode_WVC1/
+  cp $MOUNTPOINT/dt-blob.bin.bak $MOUNTPOINT/dt-blob.bin
 
 # cleanup mountpoint
   umount $MOUNTPOINT
