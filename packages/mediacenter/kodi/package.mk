@@ -410,6 +410,11 @@ post_makeinstall_target() {
       cp $PKG_DIR/config/appliance.xml $INSTALL/usr/share/kodi/system/settings
     fi
 
+  mkdir -p $INSTALL/usr/share/kodi/media
+    if [ -d $PROJECT_DIR/$PROJECT/kodi/ledpatterns ]; then
+      cp -R $PROJECT_DIR/$PROJECT/kodi/ledpatterns $INSTALL/usr/share/kodi/media
+    fi
+
   if [ "$KODI_EXTRA_FONTS" = yes ]; then
     mkdir -p $INSTALL/usr/share/kodi/media/Fonts
       cp $PKG_DIR/fonts/*.ttf $INSTALL/usr/share/kodi/media/Fonts
