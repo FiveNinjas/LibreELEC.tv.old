@@ -1,0 +1,12 @@
+diff -ru kodi-15.0-rc3-284f66a-old/xbmc/cores/AudioEngine/Sinks/AESinkALSA.cpp kodi-15.0-rc3-284f66a/xbmc/cores/AudioEngine/Sinks/AESinkALSA.cpp
+--- kodi-15.0-rc3-284f66a-old/xbmc/cores/AudioEngine/Sinks/AESinkALSA.cpp	2015-07-25 19:04:08.105652775 +0000
++++ kodi-15.0-rc3-284f66a/xbmc/cores/AudioEngine/Sinks/AESinkALSA.cpp	2015-07-25 19:05:20.857652775 +0000
+@@ -1343,7 +1343,7 @@
+       info.m_displayName = cardName;
+ 
+     // hack: hifiberry digi doesn't correctly report as iec958 device. Needs fixing in kernel driver
+-    if (info.m_displayName == "snd_rpi_hifiberry_digi")
++    //if (info.m_displayName == "snd_rpi_hifiberry_digi")
+       info.m_deviceType = AE_DEVTYPE_IEC958;
+ 
+     if (info.m_deviceType == AE_DEVTYPE_HDMI && info.m_displayName.size() > 5 &&
