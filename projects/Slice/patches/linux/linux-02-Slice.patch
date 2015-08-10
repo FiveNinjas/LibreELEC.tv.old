@@ -36,10 +36,10 @@ index ed484ae..a2a8692 100644
  Info:   Enable uart1 in place of uart0
 diff --git a/arch/arm/boot/dts/overlays/slice-overlay.dts b/arch/arm/boot/dts/overlays/slice-overlay.dts
 new file mode 100644
-index 0000000..e93592f
+index 0000000..c01fed8
 --- /dev/null
 +++ b/arch/arm/boot/dts/overlays/slice-overlay.dts
-@@ -0,0 +1,133 @@
+@@ -0,0 +1,162 @@
 +// Definitions for Slice hardware
 +/dts-v1/;
 +/plugin/;
@@ -68,6 +68,10 @@ index 0000000..e93592f
 +      i2s_pins: i2s {
 +        brcm,pins = <28 29 30 31>;
 +        brcm,function = <6>; /* alt2 */
++      };
++      ws2812_pins: ws2812 {
++        brcm,pins = <40>;
++        brcm,function = <4>; /* alt0 */
 +      };
 +    };
 +  };
@@ -106,6 +110,7 @@ index 0000000..e93592f
 +        compatible = "cirrus,cs4265";
 +        reg = <0x4e>;
 +        cs4265-reset-gpios = <&gpio 33 0>; /* AUD_RST_N on GPIO33 */
++        cirrus,no-s16le; /* remove S16LE support to workaround I2S controller issue */
 +        status = "okay";
 +      };
 +    };
@@ -168,7 +173,31 @@ index 0000000..e93592f
 +    __overlay__ {
 +      pinctrl-names = "default";
 +      pinctrl-0 = <&i2s_pins>;
++      brcm,enable-mmap;
 +      status = "okay";
++    };
++  };
++
++  //
++  // WS2812B LEDs driver
++  //
++  fragment@6 {
++    target = <&soc>;
++    __overlay__ {
++      #address-cells = <1>;
++      #size-cells = <1>;
++      ws2812: ws2812 {
++        compatible = "rpi,ws2812";
++        pinctrl-names = "default";
++        pinctrl-0 = <&ws2812_pins>;
++        reg = <0x7e20c000 0x100>; /* PWM */
++        dmas = <&dma 5>;
++        dma-names = "pwm_dma";
++        led-en-gpios = <&gpio 43 0>;
++        rpi,invert = <1>;
++        rpi,num_leds = <25>;
++        status = "okay";
++      };
 +    };
 +  };
 +
@@ -214,10 +243,10 @@ index 0000000..42cde9d
 +};
 diff --git a/arch/arm/configs/slice2708_defconfig b/arch/arm/configs/slice2708_defconfig
 new file mode 100644
-index 0000000..ed1a6a9
+index 0000000..04d242c
 --- /dev/null
 +++ b/arch/arm/configs/slice2708_defconfig
-@@ -0,0 +1,1200 @@
+@@ -0,0 +1,1201 @@
 +# CONFIG_ARM_PATCH_PHYS_VIRT is not set
 +CONFIG_PHYS_OFFSET=0
 +# CONFIG_LOCALVERSION_AUTO is not set
@@ -609,6 +638,7 @@ index 0000000..ed1a6a9
 +CONFIG_BLK_DEV_RAM=y
 +CONFIG_CDROM_PKTCDVD=m
 +CONFIG_ATA_OVER_ETH=m
++CONFIG_BCM2835_WS2812=m
 +CONFIG_EEPROM_AT24=m
 +CONFIG_SCSI=y
 +# CONFIG_SCSI_PROC_FS is not set
@@ -2359,7 +2389,7 @@ index 0000000..220a070
 +MODULE_DESCRIPTION("ASoC Driver for Slice on-board audio");
 +MODULE_LICENSE("GPL v2");
 diff --git a/sound/soc/codecs/cs4265.c b/sound/soc/codecs/cs4265.c
-index cac48dd..aa1f7311 100644
+index cac48dd..e6af80bb 100644
 --- a/sound/soc/codecs/cs4265.c
 +++ b/sound/soc/codecs/cs4265.c
 @@ -87,9 +87,9 @@ static bool cs4265_volatile_register(struct device *dev, unsigned int reg)
@@ -2464,7 +2494,21 @@ index cac48dd..aa1f7311 100644
  
  		break;
  	default:
-@@ -605,12 +602,18 @@ static int cs4265_i2c_probe(struct i2c_client *i2c_client,
+@@ -512,8 +509,11 @@ static int cs4265_set_bias_level(struct snd_soc_codec *codec,
+ 			SNDRV_PCM_RATE_88200 | SNDRV_PCM_RATE_96000 | \
+ 			SNDRV_PCM_RATE_176400 | SNDRV_PCM_RATE_192000)
+ 
+-#define CS4265_FORMATS (SNDRV_PCM_FMTBIT_S16_LE | SNDRV_PCM_FMTBIT_U16_LE | \
+-			SNDRV_PCM_FMTBIT_S24_LE | SNDRV_PCM_FMTBIT_U24_LE)
++#define CS4265_FORMATS (SNDRV_PCM_FMTBIT_S16_LE | \
++			SNDRV_PCM_FMTBIT_S24_LE | SNDRV_PCM_FMTBIT_S32_LE)
++
++#define CS4265_FORMATS_NOS16LE (SNDRV_PCM_FMTBIT_S24_LE | \
++			SNDRV_PCM_FMTBIT_S32_LE)
+ 
+ static const struct snd_soc_dai_ops cs4265_ops = {
+ 	.hw_params	= cs4265_pcm_hw_params,
+@@ -605,12 +605,18 @@ static int cs4265_i2c_probe(struct i2c_client *i2c_client,
  		return ret;
  	}
  
@@ -2488,7 +2532,7 @@ index cac48dd..aa1f7311 100644
  		mdelay(1);
  		gpiod_set_value_cansleep(cs4265->reset_gpio, 1);
  	}
-@@ -623,7 +626,7 @@ static int cs4265_i2c_probe(struct i2c_client *i2c_client,
+@@ -623,7 +629,7 @@ static int cs4265_i2c_probe(struct i2c_client *i2c_client,
  		ret = -ENODEV;
  		dev_err(&i2c_client->dev,
  			"CS4265 Device ID (%X). Expected %X\n",
@@ -2497,3 +2541,25 @@ index cac48dd..aa1f7311 100644
  		return ret;
  	}
  	dev_info(&i2c_client->dev,
+@@ -632,9 +638,21 @@ static int cs4265_i2c_probe(struct i2c_client *i2c_client,
+ 
+ 	regmap_write(cs4265->regmap, CS4265_PWRCTL, 0x0F);
+ 
++	/* at least one SoC I2S controller has some issues with 16 bit
++	   packed mode in certain circumstances, so provide the option
++	   to remove support for it */
++	if(of_property_read_bool(i2c_client->dev.of_node, "cirrus,no-s16le"))
++	{
++		cs4265_dai[0].playback.formats = CS4265_FORMATS_NOS16LE;
++		cs4265_dai[0].capture.formats = CS4265_FORMATS_NOS16LE;
++		cs4265_dai[1].playback.formats = CS4265_FORMATS_NOS16LE;
++		cs4265_dai[1].capture.formats = CS4265_FORMATS_NOS16LE;
++	}
++
+ 	ret =  snd_soc_register_codec(&i2c_client->dev,
+ 			&soc_codec_cs4265, cs4265_dai,
+ 			ARRAY_SIZE(cs4265_dai));
++
+ 	return ret;
+ }
+ 
