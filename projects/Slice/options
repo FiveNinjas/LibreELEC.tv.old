@@ -60,7 +60,7 @@
     LINUX="default"
 
   # NOOBS supported hex versions
-    NOOBS_HEX="2,3,4,5,6,7,8,9,d,e,f,10,11,12,14,17,19,20"
+    NOOBS_HEX="2,3,4,5,6,7,8,9,d,e,f,10,11,12,14,17,19,20,1000014,1000017,1000019,1000020"
 
 ################################################################################
 # setup build defaults
@@ -148,4 +148,4 @@
   # for a list of additinoal drivers see packages/linux-drivers
   # Space separated list is supported,
   # e.g. ADDITIONAL_DRIVERS="DRIVER1 DRIVER2"
-    ADDITIONAL_DRIVERS="$ADDITIONAL_DRIVERS mt7601u"
+    ADDITIONAL_DRIVERS="$ADDITIONAL_DRIVERS"
