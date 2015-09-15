@@ -2576,3 +2576,33 @@ index cac48dd..859a540 100644
  	return ret;
  }
  
+From ce0e6a109cc05315dd4c83cd70e4a6ee1da77b0f Mon Sep 17 00:00:00 2001
+From: Gordon Hollingworth <gordon@fiveninjas.com>
+Date: Tue, 15 Sep 2015 05:30:17 +0000
+Subject: [PATCH 2/2] Remove standard BCM2835 audio
+
+---
+ arch/arm/boot/dts/overlays/slice-overlay.dts | 9 +++++++++
+ 1 file changed, 9 insertions(+)
+
+diff --git a/arch/arm/boot/dts/overlays/slice-overlay.dts b/arch/arm/boot/dts/overlays/slice-overlay.dts
+index c01fed8..4eab164 100644
+--- a/arch/arm/boot/dts/overlays/slice-overlay.dts
++++ b/arch/arm/boot/dts/overlays/slice-overlay.dts
+@@ -159,4 +159,13 @@
+     };
+   };
+ 
++  //
++  // Disable standard audio
++  //
++  fragment@7 {
++    target = <&audio>;
++    __overlay__ {
++      status = "disabled";
++    };
++  };
+ };
+-- 
+2.4.5
+
