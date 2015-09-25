@@ -391,8 +391,9 @@ fi
 
     # cleanup release dir
       rm -rf $RELEASE_DIR
+  fi
 
-  elif [ "$1" = "noobs" ]; then
+  if [ "$1" = "noobs" -o "$1" = "release" ]; then
 
     RELEASE_DIR="$TARGET_IMG/${IMAGE_NAME}-$1"
 
