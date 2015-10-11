@@ -1,28 +1,21 @@
 diff --git a/arch/arm/boot/dts/overlays/Makefile b/arch/arm/boot/dts/overlays/Makefile
-index 5f6082f..251c0b6 100644
+index 6de04be..086d230 100644
 --- a/arch/arm/boot/dts/overlays/Makefile
 +++ b/arch/arm/boot/dts/overlays/Makefile
-@@ -41,6 +41,7 @@ dtb-$(RPI_DT_OVERLAYS) += rpi-ft5406-overlay.dtb
- dtb-$(RPI_DT_OVERLAYS) += rpi-proto-overlay.dtb
- dtb-$(RPI_DT_OVERLAYS) += rpi-sense-overlay.dtb
- dtb-$(RPI_DT_OVERLAYS) += sdhost-overlay.dtb
-+dtb-$(RPI_DT_OVERLAYS) += slice-overlay.dtb
- dtb-$(RPI_DT_OVERLAYS) += spi-bcm2708-overlay.dtb
- dtb-$(RPI_DT_OVERLAYS) += spi-bcm2835-overlay.dtb
- dtb-$(RPI_DT_OVERLAYS) += tinylcd35-overlay.dtb
-@@ -48,6 +49,7 @@ dtb-$(RPI_DT_OVERLAYS) += uart1-overlay.dtb
+@@ -57,6 +57,8 @@ dtb-$(RPI_DT_OVERLAYS) += uart1-overlay.dtb
  dtb-$(RPI_DT_OVERLAYS) += vga666-overlay.dtb
  dtb-$(RPI_DT_OVERLAYS) += w1-gpio-overlay.dtb
  dtb-$(RPI_DT_OVERLAYS) += w1-gpio-pullup-overlay.dtb
 +dtb-$(RPI_DT_OVERLAYS) += ws2812-overlay.dtb
++dtb-$(RPI_DT_OVERLAYS) += slice-overlay.dtb
  
  targets += dtbs dtbs_install
  targets += $(dtb-y)
 diff --git a/arch/arm/boot/dts/overlays/README b/arch/arm/boot/dts/overlays/README
-index ed484ae..a2a8692 100644
+index 68b608b..b1af366 100644
 --- a/arch/arm/boot/dts/overlays/README
 +++ b/arch/arm/boot/dts/overlays/README
-@@ -504,6 +504,11 @@ Params: speed                    Display SPI bus speed
+@@ -609,6 +609,11 @@ Params: speed                    Display SPI bus speed
              Old touch display:
                  dtoverlay=tinylcd35,touch,touchgpio=3
  
@@ -36,10 +29,10 @@ index ed484ae..a2a8692 100644
  Info:   Enable uart1 in place of uart0
 diff --git a/arch/arm/boot/dts/overlays/slice-overlay.dts b/arch/arm/boot/dts/overlays/slice-overlay.dts
 new file mode 100644
-index 0000000..c01fed8
+index 0000000..4eab164
 --- /dev/null
 +++ b/arch/arm/boot/dts/overlays/slice-overlay.dts
-@@ -0,0 +1,162 @@
+@@ -0,0 +1,171 @@
 +// Definitions for Slice hardware
 +/dts-v1/;
 +/plugin/;
@@ -201,6 +194,15 @@ index 0000000..c01fed8
 +    };
 +  };
 +
++  //
++  // Disable standard audio
++  //
++  fragment@7 {
++    target = <&audio>;
++    __overlay__ {
++      status = "disabled";
++    };
++  };
 +};
 diff --git a/arch/arm/boot/dts/overlays/ws2812-overlay.dts b/arch/arm/boot/dts/overlays/ws2812-overlay.dts
 new file mode 100644
@@ -1449,7 +1451,7 @@ index 0000000..04d242c
 +CONFIG_CRC_ITU_T=y
 +CONFIG_LIBCRC32C=y
 diff --git a/drivers/misc/Kconfig b/drivers/misc/Kconfig
-index 4e6f46c..d354f4d 100644
+index 8b82c9b..1e38d20 100644
 --- a/drivers/misc/Kconfig
 +++ b/drivers/misc/Kconfig
 @@ -4,6 +4,10 @@
@@ -1464,7 +1466,7 @@ index 4e6f46c..d354f4d 100644
  	tristate
  	depends on INPUT
 diff --git a/drivers/misc/Makefile b/drivers/misc/Makefile
-index 43d2ac9..8439402 100644
+index b668a08..29553da 100644
 --- a/drivers/misc/Makefile
 +++ b/drivers/misc/Makefile
 @@ -2,6 +2,7 @@
@@ -2025,13 +2027,13 @@ index 4cdb64b..3045f46 100644
  		return err;
  
 diff --git a/sound/soc/bcm/Kconfig b/sound/soc/bcm/Kconfig
-index fc151ea..7572af4 100644
+index 3db2852..525ea44 100644
 --- a/sound/soc/bcm/Kconfig
 +++ b/sound/soc/bcm/Kconfig
-@@ -67,3 +67,10 @@ config SND_BCM2708_SOC_IQAUDIO_DAC
- 	select SND_SOC_PCM512x_I2C
+@@ -75,3 +75,10 @@ config SND_BCM2708_SOC_RASPIDAC3
+ 	select SND_SOC_TPA6130A2
  	help
- 	  Say Y or M if you want to add support for IQaudIO-DAC.
+ 	  Say Y or M if you want to add support for RaspiDAC Rev.3x.
 +
 +config SND_BCM2708_SOC_SLICE
 +	tristate "Support for Slice on-board sound"
@@ -2040,21 +2042,21 @@ index fc151ea..7572af4 100644
 +	help
 +	  Say Y or M if you want to add support for Slice on-board sound.
 diff --git a/sound/soc/bcm/Makefile b/sound/soc/bcm/Makefile
-index 883241b..a6673ee 100644
+index 621358b..8b8305e 100644
 --- a/sound/soc/bcm/Makefile
 +++ b/sound/soc/bcm/Makefile
-@@ -16,6 +16,7 @@ snd-soc-hifiberry-amp-objs := hifiberry_amp.o
- snd-soc-rpi-dac-objs := rpi-dac.o
+@@ -17,6 +17,7 @@ snd-soc-rpi-dac-objs := rpi-dac.o
  snd-soc-rpi-proto-objs := rpi-proto.o
  snd-soc-iqaudio-dac-objs := iqaudio-dac.o
+ snd-soc-raspidac3-objs := raspidac3.o
 +snd-soc-slice-objs := slice.o
  
  obj-$(CONFIG_SND_BCM2708_SOC_HIFIBERRY_DAC) += snd-soc-hifiberry-dac.o
  obj-$(CONFIG_SND_BCM2708_SOC_HIFIBERRY_DACPLUS) += snd-soc-hifiberry-dacplus.o
-@@ -24,3 +25,4 @@ obj-$(CONFIG_SND_BCM2708_SOC_HIFIBERRY_AMP) += snd-soc-hifiberry-amp.o
- obj-$(CONFIG_SND_BCM2708_SOC_RPI_DAC) += snd-soc-rpi-dac.o
+@@ -26,3 +27,4 @@ obj-$(CONFIG_SND_BCM2708_SOC_RPI_DAC) += snd-soc-rpi-dac.o
  obj-$(CONFIG_SND_BCM2708_SOC_RPI_PROTO) += snd-soc-rpi-proto.o
  obj-$(CONFIG_SND_BCM2708_SOC_IQAUDIO_DAC) += snd-soc-iqaudio-dac.o
+ obj-$(CONFIG_SND_BCM2708_SOC_RASPIDAC3) += snd-soc-raspidac3.o
 +obj-$(CONFIG_SND_BCM2708_SOC_SLICE) += snd-soc-slice.o
 diff --git a/sound/soc/bcm/slice.c b/sound/soc/bcm/slice.c
 new file mode 100644
@@ -2563,33 +2565,3 @@ index cac48dd..e6af80bb 100644
  	return ret;
  }
  
-From ce0e6a109cc05315dd4c83cd70e4a6ee1da77b0f Mon Sep 17 00:00:00 2001
-From: Gordon Hollingworth <gordon@fiveninjas.com>
-Date: Tue, 15 Sep 2015 05:30:17 +0000
-Subject: [PATCH 2/2] Remove standard BCM2835 audio
-
----
- arch/arm/boot/dts/overlays/slice-overlay.dts | 9 +++++++++
- 1 file changed, 9 insertions(+)
-
-diff --git a/arch/arm/boot/dts/overlays/slice-overlay.dts b/arch/arm/boot/dts/overlays/slice-overlay.dts
-index c01fed8..4eab164 100644
---- a/arch/arm/boot/dts/overlays/slice-overlay.dts
-+++ b/arch/arm/boot/dts/overlays/slice-overlay.dts
-@@ -159,4 +159,13 @@
-     };
-   };
- 
-+  //
-+  // Disable standard audio
-+  //
-+  fragment@7 {
-+    target = <&audio>;
-+    __overlay__ {
-+      status = "disabled";
-+    };
-+  };
- };
--- 
-2.4.5
-
