@@ -488,6 +488,12 @@ fi
       rm -rf $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System
       rm -rf $RELEASE_DIR/${DISTRONAME}_${PROJECT}/Storage
 
+    # Get total size for partition spec
+      sz=`du -s $RELEASE_DIR/${DISTRONAME}_${PROJECT}/ | cut -f1`
+      sz=$((sz/1000))
+      sed -e "s/@TARBALL_SIZE@/$sz/g" \
+          -i $RELEASE_DIR/${DISTRONAME}_${PROJECT}/partitions.json
+
     # remove an previous created release tarball
       rm -rf $TARGET_IMG/${IMAGE_NAME}-$1.tar
 
