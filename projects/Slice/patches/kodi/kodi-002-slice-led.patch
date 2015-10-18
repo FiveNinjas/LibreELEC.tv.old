@@ -254,7 +254,7 @@ reverted:
 +  m_ledthread->Create();
 +  g_pattern = PAT_STARTUP;
 +  g_speed = 30000;
-+  g_repeat = 1;
++  g_repeat = 0;
 +  m_ledevent->Set();
 -  
    CAnnouncementManager::Get().AddAnnouncer(this);
