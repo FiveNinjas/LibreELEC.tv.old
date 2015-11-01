@@ -1,0 +1,12 @@
+diff -ru kodi-15.2-rc3-9efd358/system/keymaps/keyboard.xml kodi-15.2-rc3-9efd358-new/system/keymaps/keyboard.xml
+--- kodi-15.2-rc3-9efd358/system/keymaps/keyboard.xml	2015-10-13 16:55:24.000000000 +0000
++++ kodi-15.2-rc3-9efd358-new/system/keymaps/keyboard.xml	2015-10-31 12:26:46.333652775 +0000
+@@ -61,7 +61,7 @@
+       <i>Info</i>
+       <menu>ContextMenu</menu>
+       <c>ContextMenu</c>
+-      <space>Pause</space>
++      <space>PlayPause</space>
+       <x>Stop</x>
+       <period>SkipNext</period>
+       <comma>SkipPrevious</comma>
