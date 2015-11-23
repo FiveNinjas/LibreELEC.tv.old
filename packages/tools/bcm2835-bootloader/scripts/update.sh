@@ -59,6 +59,8 @@
 
   fi
 
+cp $SYSTEM_ROOT/usr/config/shutdown.sh /storage/.config/
+
 # mount $BOOT_ROOT r/o
   sync
   mount -o remount,ro $BOOT_ROOT
