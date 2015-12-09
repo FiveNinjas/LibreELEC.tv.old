@@ -1,6 +1,6 @@
 diff -ru kodi-15.2-02e7013/xbmc/windows/GUIWindowHome.cpp kodi-15.2-02e7013-new/xbmc/windows/GUIWindowHome.cpp
 --- kodi-15.2-02e7013/xbmc/windows/GUIWindowHome.cpp	2015-11-04 20:19:49.941652775 +0000
-+++ kodi-15.2-02e7013-new/xbmc/windows/GUIWindowHome.cpp	2015-11-06 16:09:06.881652775 +0000
++++ kodi-15.2-02e7013-new/xbmc/windows/GUIWindowHome.cpp	2015-12-09 07:00:38.613652775 +0000
 @@ -44,11 +44,11 @@
  int g_repeat = 0;
   
@@ -33,16 +33,17 @@ diff -ru kodi-15.2-02e7013/xbmc/windows/GUIWindowHome.cpp kodi-15.2-02e7013-new/
  };
  
  int zeroes[25] = { 0,};
-@@ -231,7 +232,7 @@
+@@ -231,7 +232,8 @@
          while(g_repeat);
          g_pattern_playing = 0;
  
 -        write(fd, zeroes, sizeof(zeroes)); 
-+        //write(fd, zeroes, sizeof(zeroes)); 
++        if(pat != PAT_QUIT)
++          write(fd, zeroes, sizeof(zeroes)); 
        }
        else
        {
-@@ -327,12 +328,13 @@
+@@ -327,12 +329,13 @@
      {
        switch(led_actions[i].action) { 
          case ACTION_DO:
@@ -57,3 +58,5 @@ diff -ru kodi-15.2-02e7013/xbmc/windows/GUIWindowHome.cpp kodi-15.2-02e7013-new/
            g_speed = 30000;
            g_pattern = (int) led_actions[i].action_data;
            m_ledevent->Set();
+Only in kodi-15.2-02e7013-new/xbmc/windows: GUIWindowHome.cpp.orig
+Only in kodi-15.2-02e7013-new/xbmc/windows: GUIWindowHome.cpp.rej
