@@ -1,0 +1,14 @@
+diff -ru OpenELEC-settings-0.6.8/src/defaults.py OpenELEC-settings-0.6.8-new/src/defaults.py
+--- OpenELEC-settings-0.6.8/src/defaults.py	2015-06-14 08:05:06.000000000 +0000
++++ OpenELEC-settings-0.6.8-new/src/defaults.py	2015-09-15 16:24:42.385652775 +0000
+@@ -82,8 +82,8 @@
+     'ENABLED': True,
+     'KERNEL_CMD': '/proc/cmdline',
+     'SET_CLOCK_CMD': '/sbin/hwclock --systohc --utc',
+-    'UPDATE_REQUEST_URL': 'http://update.openelec.tv/updates.php',
+-    'UPDATE_DOWNLOAD_URL': 'http://%s.openelec.tv/%s',
++    'UPDATE_REQUEST_URL': 'http://updates.fiveninjas.com/updates.php',
++    'UPDATE_DOWNLOAD_URL': 'http://%s.fiveninjas.com/%s',
+     'LOCAL_UPDATE_DIR': '/storage/.update/',
+     'GET_CPU_FLAG': "cat /proc/cpuinfo | grep -q 'flags.* lm ' && echo '1' || echo '0'",
+     'XBMC_RESET_FILE': '%s/reset_xbmc' % CONFIG_CACHE,

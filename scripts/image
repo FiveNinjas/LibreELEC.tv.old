@@ -468,6 +468,7 @@ fi
         cp -PR $BUILD/bcm2835-bootloader-*/bootcode.bin $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System/
         cp -PR $BUILD/bcm2835-bootloader-*/fixup_x.dat $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System/fixup.dat
         cp -PR $BUILD/bcm2835-bootloader-*/start_x.elf $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System/start.elf
+        cp -PR $BUILD/bcm2835-bootloader-*/dt-blob.bin $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System/dt-blob.bin
 
       # copy system files
         cp $TARGET_IMG/$IMAGE_NAME.system $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System/SYSTEM
@@ -510,6 +511,12 @@ fi
     # remove an filesystem dirs
       rm -rf $RELEASE_DIR/${DISTRONAME}_${PROJECT}/System
       rm -rf $RELEASE_DIR/${DISTRONAME}_${PROJECT}/Storage
+
+    # Get total size for partition spec
+      sz=`du -s $RELEASE_DIR/${DISTRONAME}_${PROJECT}/ | cut -f1`
+      sz=$((sz/1000))
+      sed -e "s/@TARBALL_SIZE@/$sz/g" \
+          -i $RELEASE_DIR/${DISTRONAME}_${PROJECT}/partitions.json
 
     # remove an previous created release tarball
       rm -rf $TARGET_IMG/${IMAGE_NAME}-$1.tar

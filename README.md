@@ -1,3 +1,12 @@
+[SliceOS]
+
+This is a build system to create the SliceOS build for the Slice media player.  To build you need to run:
+
+```
+ARCH=arm PROJECT=Slice DISTRO=Slice make
+```
+This will then build the targets for the Slice distribution.  To install the build it should be possible to achieve this using standard update mechanism for OpenELEC (copy the SYSTEM SYSTEM.md5 KERNEL KERNEL.md5 into the updates share). 
+
 [LibreELEC](http://www.libreelec.tv)
 
 # LibreELEC - Libre Embedded Linux Entertainment Center

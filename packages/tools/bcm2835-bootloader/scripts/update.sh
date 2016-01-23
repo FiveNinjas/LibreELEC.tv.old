@@ -29,6 +29,7 @@
   cp -p $SYSTEM_ROOT/usr/share/bootloader/bootcode.bin $BOOT_ROOT
   cp -p $SYSTEM_ROOT/usr/share/bootloader/fixup.dat $BOOT_ROOT
   cp -p $SYSTEM_ROOT/usr/share/bootloader/start.elf $BOOT_ROOT
+  cp -p $SYSTEM_ROOT/usr/share/bootloader/dt-blob.bin $BOOT_ROOT
 
   cp -p $SYSTEM_ROOT/usr/share/bootloader/*.dtb $BOOT_ROOT
   cp -pR $SYSTEM_ROOT/usr/share/bootloader/overlays $BOOT_ROOT
@@ -49,7 +50,16 @@
 #    sed -e "s,gpu_mem=100,gpu_mem=128,g" -i $BOOT_ROOT/config.txt
 #    sed -e "s,gpu_mem_256=100,# gpu_mem_256=128,g" -i $BOOT_ROOT/config.txt
 #    sed -e "s,gpu_mem_512=128,# gpu_mem_512=128,g" -i $BOOT_ROOT/config.txt
+  elif [ -z "`grep "^[ ]*arm_freq.*" $BOOT_ROOT/config.txt`" ]; then
+    sed -e "s,#.*arm_freq=.*,arm_freq=900,g" -i $BOOT_ROOT/config.txt
+    sed -e "s,#.*core_freq=.*,core_freq=300,g" -i $BOOT_ROOT/config.txt
+    sed -e "s,#.*sdram_freq=.*,sdram_freq=450,g" -i $BOOT_ROOT/config.txt
+    sed -e "s,#.*over_voltage=.*,over_voltage=6,g" -i $BOOT_ROOT/config.txt
+    sed -e "s,.*force_turbo=0.*,force_turbo=1,g" -i $BOOT_ROOT/config.txt
+
   fi
+
+cp $SYSTEM_ROOT/usr/config/shutdown.sh /storage/.config/
 
 # mount $BOOT_ROOT r/o
   sync
