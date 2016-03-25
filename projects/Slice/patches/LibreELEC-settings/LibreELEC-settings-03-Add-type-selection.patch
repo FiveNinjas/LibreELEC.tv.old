@@ -1,14 +1,6 @@
-Only in OpenELEC-settings-0.6.8-new/: build
-diff -ru OpenELEC-settings-0.6.8/language/English/strings.po OpenELEC-settings-0.6.8-new/language/English/strings.po
---- OpenELEC-settings-0.6.8/language/English/strings.po	2015-06-14 08:05:06.000000000 +0000
-+++ OpenELEC-settings-0.6.8-new/language/English/strings.po	2015-10-27 21:24:55.385652775 +0000
-@@ -1,5 +1,5 @@
- # Kodi Media Center language file
--# Addon Name: @DISTRONAME@ Configuration
-+# Addon Name: Slice Configuration
- # Addon id: service.openelec.settings
- # Addon Provider: OpenELEC
- msgid ""
+diff -ru LibreELEC-settings-659a94c/language/English/strings.po LibreELEC-settings-659a94c-new/language/English/strings.po
+--- LibreELEC-settings-659a94c/language/English/strings.po	2016-03-24 22:36:39.817652775 +0000
++++ LibreELEC-settings-659a94c-new/language/English/strings.po	2016-03-24 22:37:44.881652775 +0000
 @@ -17,7 +17,7 @@
  "Plural-Forms: nplurals=2; plural=(n != 1);\n"
  
@@ -218,9 +210,10 @@ diff -ru OpenELEC-settings-0.6.8/language/English/strings.po OpenELEC-settings-0
  
  msgctxt "#32379"
  msgid "There is not enough free storage space to continue!"
-diff -ru OpenELEC-settings-0.6.8/src/resources/lib/modules/system.py OpenELEC-settings-0.6.8-new/src/resources/lib/modules/system.py
---- OpenELEC-settings-0.6.8/src/resources/lib/modules/system.py	2015-10-26 16:35:29.621652775 +0000
-+++ OpenELEC-settings-0.6.8-new/src/resources/lib/modules/system.py	2015-10-27 21:23:57.685652775 +0000
+Only in LibreELEC-settings-659a94c-new/language/English: strings.po.orig
+diff -ru LibreELEC-settings-659a94c/src/resources/lib/modules/system.py LibreELEC-settings-659a94c-new/src/resources/lib/modules/system.py
+--- LibreELEC-settings-659a94c/src/resources/lib/modules/system.py	2016-03-24 22:36:39.821652775 +0000
++++ LibreELEC-settings-659a94c-new/src/resources/lib/modules/system.py	2016-03-24 22:40:53.261652775 +0000
 @@ -161,7 +161,16 @@
                              'InfoText': 716,
                              'order': 3,
@@ -324,16 +317,16 @@ diff -ru OpenELEC-settings-0.6.8/src/resources/lib/modules/system.py OpenELEC-se
                  self.cpu_lm_flag,
                  )
              self.oe.dbg_log('system::check_updates_v2', 'URL: %s' % url, 0)
-@@ -627,7 +674,7 @@
+@@ -632,7 +679,7 @@
              self.oe.dbg_log('system::reset_oe', 'enter_function', 0)
-             if self.ask_sure_reset('OpenELEC') == 1:
+             if self.ask_sure_reset('LibreELEC') == 1:
                  self.oe.set_busy(1)
--                reset_file = open(self.OPENELEC_RESET_FILE, 'w')
+-                reset_file = open(self.LIBREELEC_RESET_FILE, 'w')
 +                reset_file = open(self.XBMC_RESET_FILE, 'w')
                  reset_file.write('reset')
                  reset_file.close()
                  self.oe.winOeMain.close()
-@@ -750,6 +797,24 @@
+@@ -762,6 +809,24 @@
          except Exception, e:
              self.oe.dbg_log('system::do_restore', 'ERROR: (' + repr(e) + ')')
  
@@ -358,4 +351,4 @@ diff -ru OpenELEC-settings-0.6.8/src/resources/lib/modules/system.py OpenELEC-se
      def tar_add_folder(self, tar, folder):
          try:
              for item in os.listdir(folder):
-Only in OpenELEC-settings-0.6.8-new/textures: Slice
+Only in LibreELEC-settings-659a94c-new/src/resources/lib/modules: system.py.orig

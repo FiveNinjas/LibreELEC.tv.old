@@ -17,7 +17,7 @@
 ################################################################################
 
 PKG_NAME="kodi-theme-slice"
-PKG_VERSION="0.9.17u"
+PKG_VERSION="0.9.18"
 PKG_REV="1"
 PKG_ARCH="any"
 PKG_LICENSE="GPL"

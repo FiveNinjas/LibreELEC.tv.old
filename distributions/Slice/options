@@ -2,17 +2,20 @@
   DISTRONAME="Slice"
 
 # short project description
-  DESCRIPTION="Slice is a distribution of OpenELEC."
+  DESCRIPTION="Slice is a distribution of Kodi based on the LibreELEC.tv"
 
 # Welcome Message for e.g. SSH Server (up to 5 Lines)
   GREETING0="##############################################"
-  GREETING1="# OpenELEC - The living room PC for everyone #"
-  GREETING2="# ...... visit http://www.openelec.tv ...... #"
+  GREETING1="#                 LibreELEC                  #"
+  GREETING2="#            http://libreelec.tv             #"
   GREETING3="##############################################"
   GREETING4=""
 
 # Root password to integrate in the target system
   ROOT_PASSWORD="openelec"
+
+# Install glibc locales to the build (yes / no)
+  GLIBC_LOCALES="yes"
 
 # Mediacenter to use (kodi / no)
   MEDIACENTER="kodi"
@@ -28,27 +31,8 @@
 # install extra subtitle Fonts for KODI (yes / no)
   KODI_EXTRA_FONTS="yes"
 
-# build and install 'RSXS' Screensaver (yes / no)
-  KODI_SCR_RSXS="yes"
-
-# build and install 'ProjectM' Visualization (yes / no)
-  KODI_VIS_PROJECTM="yes"
-
-# build and install 'GOOM' Visualization (yes / no)
-  KODI_VIS_GOOM="yes"
-
-# build and install 'Waveform' Visualization (yes / no)
-  KODI_VIS_WAVEFORM="yes"
-
-# build and install 'Spectrum' Visualization (yes / no)
-  KODI_VIS_SPECTRUM="yes"
-
-# build and install 'FishBMC' Visualization (yes / no)
-  # does not work on RPi
-  KODI_VIS_FISHBMC="yes"
-
 # build and install PulseAudio support (yes / no)
-  PULSEAUDIO_SUPPORT="no"
+  PULSEAUDIO_SUPPORT="yes"
 
 # build and install espeak support (yes / no)
   ESPEAK_SUPPORT="yes"
@@ -76,7 +60,7 @@
 # for a list of additinoal drivers see packages/linux-drivers
 # Space separated list is supported,
 # e.g. ADDITIONAL_DRIVERS="DRIVER1 DRIVER2"
-  ADDITIONAL_DRIVERS="RTL8192CU RTL8192DU RTL8188EU RTL8812AU dvbhdhomerun"
+  ADDITIONAL_DRIVERS="RTL8192CU RTL8192DU RTL8192EU RTL8188EU RTL8812AU dvbhdhomerun"
 
 # build and install bluetooth support (yes / no)
   BLUETOOTH_SUPPORT="yes"
@@ -99,11 +83,6 @@
 # build xbmc with optical drive support (yes / no)
   KODI_OPTICAL_SUPPORT="yes"
 
-# KODI Audio encoders for usage with optical drive support
-# Space separated list is supported,
-# e.g. KODI_AUDIOENCODER_ADDONS="ENCODER1 ENCODER2"
-  KODI_AUDIOENCODER_ADDONS="flac lame vorbis wav"
-
 # build with AirPlay support (stream videos from iDevices to KODI) (yes / no)
   KODI_AIRPLAY_SUPPORT="yes"
 
@@ -116,6 +95,9 @@
 # build with Samba Client support (mounting SAMBA shares with KODI) (yes / no)
   KODI_SAMBA_SUPPORT="yes"
 
+# include initial language addons for Kodi (yes / no)
+  KODI_LANGUAGE_ADDONS="yes"
+
 # build with NFS support (mounting nfs shares via the OS) (yes / no)
   NFS_SUPPORT="yes"
 
@@ -127,9 +109,6 @@
 
 # build and install SFTP Server (yes / no)
   SFTP_SERVER="yes"
-
-# build and install PPP support (yes / no)
-  PPTP_SUPPORT="yes"
 
 # build and install OpenVPN support (yes / no)
   OPENVPN_SUPPORT="yes"
@@ -151,16 +130,10 @@
 # Windowmanager to use (ratpoison / fluxbox / none)
   WINDOWMANAGER="fluxbox"
 
-# Xorg Graphic drivers to use (all / i915,i965,r200,r300,r600,nvidia,nouveau)
+# Xorg Graphic drivers to use (all / i915,i965,r200,r300,r600,nvidia)
 # Space separated list is supported,
-# e.g. GRAPHIC_DRIVERS="i915 i965 r300 r600 radeonsi nvidia nouveau"
-  if [ "$TARGET_ARCH" = "i386" ]; then
-    # TODO: create Legacy build with OpenELEC-4.2
-    # install legacy drivers to i386 ARCH
-    GRAPHIC_DRIVERS="r200 r300 r600 i915 i965 nvidia-legacy"
-  elif [ "$TARGET_ARCH" = "x86_64" ]; then
-    GRAPHIC_DRIVERS="r300 r600 radeonsi i915 i965 nvidia"
-  fi
+# e.g. GRAPHIC_DRIVERS="i915 i965 r300 r600 radeonsi nvidia"
+  GRAPHIC_DRIVERS="r300 r600 radeonsi i915 i965 nvidia nvidia-legacy"
 
 # build and install remote support (yes / no)
   REMOTE_SUPPORT="yes"
@@ -182,7 +155,7 @@
 
 # LCD driver to Use - Possible drivers are ( Comma seperated:
 # bayrad,CFontz,CFontz633,CFontzPacket,curses,CwLnx,dm140,
-# ea65,EyeboxOne,g15,glcdlib,glk,hd44780,i2500vfd,
+# ea65,EyeboxOne,g15,glcd,glcdlib,glk,hd44780,i2500vfd,
 # icp_a106,imon,imonlcd,IOWarrior,irman,irtrans,
 # joy,lb216,lcdm001,lcterm,lirc,lis,MD8800,mdm166a,
 # ms6931,mtc_s16209x,MtxOrb,mx5000,NoritakeVFD,
@@ -221,15 +194,12 @@
 # cron support (yes / no)
   CRON_SUPPORT="yes"
 
-# Perf support in development builds (yes / no)
-  PERF_SUPPORT="yes"
-
 # Distribution Specific source location
-  DISTRO_MIRROR="http://sources.openelec.tv/mirror"
-  DISTRO_SRC="http://sources.openelec.tv/$OPENELEC_VERSION"
+  DISTRO_MIRROR="http://sources.libreelec.tv/mirror"
+  DISTRO_SRC="http://sources.libreelec.tv/$LIBREELEC_VERSION"
 
 # Addon Server Url
-  ADDON_SERVER_URL="http://addons.openelec.tv"
+  ADDON_SERVER_URL="http://addons.libreelec.tv"
 
 # set the addon dirs
   ADDON_PATH="$ADDON_VERSION/RPi/$TARGET_ARCH"
